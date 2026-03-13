@@ -1,30 +1,43 @@
 NEW_FILE_CODE
-# Python 缓存
+# Python 缓存文件
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+.Python
+
+# Python 日志
+*.log
+
+# 虚拟环境
+venv/
+env/
+ENV/
+.venv/
 
 # IDE 配置
 .idea/
 .vscode/
 *.swp
 *.swo
-
-# 数据和结果文件夹
-checkpoints/
-processed_data/
-raw_data/
-results/
-
-# Python 环境
-venv/
-env/
-.env
+*~
 
 # Jupyter Notebook
 .ipynb_checkpoints/
 
-# 操作系统
+# 操作系统文件
 .DS_Store
 Thumbs.db
+
+# 环境变量文件
+.env
+
+# 保留数据文件夹结构但不上传具体文件
+raw_data/*
+!raw_data/.gitkeep
+processed_data/*
+!processed_data/.gitkeep
+checkpoints/*
+!checkpoints/.gitkeep
+results/*
+!results/.gitkeep
