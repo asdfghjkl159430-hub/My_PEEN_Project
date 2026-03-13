@@ -1,0 +1,30 @@
+NEW_FILE_CODE
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE 配置
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 数据和结果文件夹
+checkpoints/
+processed_data/
+raw_data/
+results/
+
+# Python 环境
+venv/
+env/
+.env
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# 操作系统
+.DS_Store
+Thumbs.db
