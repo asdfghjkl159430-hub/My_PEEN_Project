@@ -17,12 +17,12 @@ TEST_IDS = ['1', '4', '7', '10', '13', '16', '19', '22', '25', '28', '31', '33']
 
 # === 3. 颜色映射 (RGB -> 类别 ID) ===
 COLOR_MAP = {
-    (255, 255, 255): 0,  # Impervious surfaces (白)
-    (0, 0, 255): 1,  # Building (蓝)
-    (0, 255, 255): 2,  # Low vegetation (青)
-    (0, 255, 0): 3,  # Tree (绿)
-    (255, 255, 0): 4,  # Car (黄)
-    (255, 0, 0): 5  # Clutter/Background (红)
+    (255, 0, 0): 0,      # Clutter/Background (红) -> 严格设为 0
+    (255, 255, 255): 1,  # Impervious surfaces (白)
+    (0, 0, 255): 2,      # Building (蓝)
+    (0, 255, 255): 3,    # Low vegetation (青)
+    (0, 255, 0): 4,      # Tree (绿)
+    (255, 255, 0): 5     # Car (黄)
 }
 
 
@@ -37,13 +37,11 @@ def rgb_to_mask(img):
 
 
 def generate_edge(mask):
-    """从语义Mask生成边缘Label，模拟论文中的 Canny/Edge GT"""
-    # 使用形态学梯度提取边缘：膨胀 - 腐蚀
-    kernel = np.ones((3, 3), np.uint8)
-    gradient = cv2.morphologyEx(mask, cv2.MORPH_GRADIENT, kernel)
-    # 只要有变化的地方就是边缘，设为 255 (白色)，其他为 0 (黑色)
-    edge = np.zeros_like(gradient)
-    edge[gradient > 0] = 255
+    """使用论文指定的 Canny 算子生成单像素精度的细边缘"""
+    # 将类别 mask (0-5) 拉伸到 0-255，确保不同类别的交界处有明显像素差
+    mask_255 = (mask * 50).astype(np.uint8)
+    # 使用 Canny 算子提取边缘 (阈值设为 10, 100 即可检出所有类别跳变)
+    edge = cv2.Canny(mask_255, 10, 100)
     return edge
 
 

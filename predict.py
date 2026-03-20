@@ -56,7 +56,7 @@ def predict():
     ])
 
     # 3. 读取测试集列表
-    test_files = os.listdir(TEST_IMG_DIR)[11:20]  # 多测几张，比如前10张
+    test_files = os.listdir(TEST_IMG_DIR)[51:80]  # 多测几张，比如前10张
 
     with torch.no_grad():
         for file_name in test_files:
@@ -68,9 +68,14 @@ def predict():
             original_img = cv2.imread(img_path)
             gt_mask = cv2.imread(gt_path, cv2.IMREAD_GRAYSCALE)
 
-            # 预处理输入
-            img_pil = Image.open(img_path).convert('RGB')
-            input_tensor = transform(img_pil).unsqueeze(0).to(DEVICE)
+            # --- 替换原来的 PIL 读取 ---
+            # img_pil = Image.open(img_path).convert('RGB')
+            # input_tensor = transform(img_pil).unsqueeze(0).to(DEVICE)
+
+            # --- 改为与 dataset.py 一致的 OpenCV 读取 ---
+            img_cv2 = cv2.imread(img_path)
+            img_cv2 = cv2.cvtColor(img_cv2, cv2.COLOR_BGR2RGB)
+            input_tensor = transform(img_cv2).unsqueeze(0).to(DEVICE)
 
             # 推理
             seg_out, edge_outs = model(input_tensor)
